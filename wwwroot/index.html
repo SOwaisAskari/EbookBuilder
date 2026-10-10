@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bindery — write and publish e-books</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ============ LIBRARY ============ -->
+<section id="view-library" hidden>
+  <header class="lib-head">
+    <h1 class="wordmark">Bindery</h1>
+    <p class="tagline">Write a book, then take it anywhere as a website, a single file or an EPUB.</p>
+    <button id="btn-new" class="primary" type="button">New book</button>
+  </header>
+  <main id="shelf" class="shelf" aria-label="Your books"></main>
+</section>
+
+<!-- ============ EDITOR ============ -->
+<section id="view-editor" hidden>
+  <header class="ed-bar">
+    <a class="back" href="#/">&larr; Library</a>
+    <span id="bar-title" class="bar-title"></span>
+    <span id="save-state" class="save-state" role="status" aria-live="polite">Saved</span>
+    <button id="btn-settings" class="only-narrow" type="button" aria-expanded="false" aria-controls="settings">Book settings</button>
+    <button id="btn-preview" type="button">Preview</button>
+    <details class="menu" id="export-menu">
+      <summary class="primary">Export</summary>
+      <div class="menu-pop">
+        <a href="#" data-format="zip"><strong>Website (.zip)</strong><span>index.html + CSS + JS + images. Open it or upload it to any host.</span></a>
+        <a href="#" data-format="single"><strong>Single HTML file</strong><span>Everything inlined, easy to email or share.</span></a>
+        <a href="#" data-format="epub"><strong>EPUB</strong><span>For Apple Books, Kobo, Calibre and e-readers.</span></a>
+      </div>
+    </details>
+  </header>
+
+  <div class="ed-grid">
+    <aside class="chapters" aria-label="Chapters">
+      <div class="panel-head">
+        <h2>Chapters</h2>
+        <button id="btn-add-chapter" type="button">Add chapter</button>
+      </div>
+      <ol id="chapter-list" class="chapter-list"></ol>
+    </aside>
+
+    <main class="desk">
+      <input id="chapter-title" class="chapter-title" type="text" placeholder="Chapter title" maxlength="200" aria-label="Chapter title">
+
+      <div class="toolbar" id="toolbar" role="toolbar" aria-label="Formatting">
+        <div class="group">
+          <button type="button" data-block="h2" title="Heading">Heading</button>
+          <button type="button" data-block="h3" title="Subheading">Subheading</button>
+          <button type="button" data-block="p" title="Normal text">Text</button>
+          <button type="button" data-block="blockquote" title="Quote">Quote</button>
+        </div>
+        <div class="group">
+          <button type="button" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button type="button" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button type="button" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button type="button" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+        </div>
+        <div class="group">
+          <button type="button" data-cmd="insertUnorderedList" title="Bulleted list">Bullets</button>
+          <button type="button" data-cmd="insertOrderedList" title="Numbered list">Numbers</button>
+        </div>
+        <div class="group">
+          <button type="button" data-cmd="justifyLeft" title="Align left">Left</button>
+          <button type="button" data-cmd="justifyCenter" title="Align centre">Centre</button>
+          <button type="button" data-cmd="justifyRight" title="Align right">Right</button>
+        </div>
+        <div class="group">
+          <button type="button" id="tb-link" title="Link">Link</button>
+          <button type="button" id="tb-image" title="Insert image">Image</button>
+          <button type="button" data-cmd="insertHorizontalRule" title="Scene break">Break</button>
+          <button type="button" id="tb-clear" title="Clear formatting">Clear</button>
+        </div>
+        <div class="group">
+          <button type="button" data-cmd="undo" title="Undo">Undo</button>
+          <button type="button" data-cmd="redo" title="Redo">Redo</button>
+        </div>
+      </div>
+
+      <div id="editor" class="page prose" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Chapter text"></div>
+    </main>
+
+    <aside class="settings" id="settings" aria-label="Book settings">
+      <div class="panel-head"><h2>Book</h2></div>
+
+      <label class="field">Title
+        <input id="s-title" type="text" maxlength="200">
+      </label>
+      <label class="field">Author
+        <input id="s-author" type="text" maxlength="200">
+      </label>
+      <label class="field">Description
+        <textarea id="s-desc" rows="4" maxlength="2000"></textarea>
+      </label>
+      <label class="field">Language
+        <select id="s-lang">
+          <option value="en">English</option>
+          <option value="ur">اردو — Urdu</option>
+          <option value="sd">سنڌي — Sindhi</option>
+          <option value="ar">العربية — Arabic</option>
+          <option value="fa">فارسی — Persian</option>
+          <option value="hi">हिन्दी — Hindi</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="pt">Português</option>
+          <option value="tr">Türkçe</option>
+          <option value="ru">Русский</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+        </select>
+      </label>
+
+      <fieldset>
+        <legend>Cover</legend>
+        <div id="cover-preview" class="cover-preview"></div>
+        <div class="row">
+          <button type="button" id="btn-cover">Upload cover</button>
+          <button type="button" id="btn-cover-remove">Remove</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>How readers see it</legend>
+        <div class="seg" role="radiogroup" aria-label="Default theme">
+          <label><input type="radio" name="mode" value="light"><span>Light</span></label>
+          <label><input type="radio" name="mode" value="sepia"><span>Sepia</span></label>
+          <label><input type="radio" name="mode" value="dark"><span>Dark</span></label>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Typeface">
+          <label><input type="radio" name="font" value="serif"><span>Serif</span></label>
+          <label><input type="radio" name="font" value="sans"><span>Sans</span></label>
+        </div>
+        <label class="field inline">Accent colour
+          <input id="s-accent" type="color" value="#263f7a">
+        </label>
+      </fieldset>
+
+      <button id="btn-delete" class="danger" type="button">Delete this book</button>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ DIALOGS ============ -->
+<dialog id="new-dialog">
+  <form method="dialog" id="new-form">
+    <h2>New book</h2>
+    <label class="field">Title
+      <input id="new-title" type="text" maxlength="200" autocomplete="off" required placeholder="The title of your book">
+    </label>
+    <div class="actions">
+      <button value="cancel" formnovalidate>Cancel</button>
+      <button value="ok" class="primary">Create</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="preview-dialog" class="preview">
+  <div class="pv-head">
+    <strong>Preview</strong>
+    <span class="pv-note">This is exactly what readers get.</span>
+    <button id="pv-close" type="button">Close</button>
+  </div>
+  <iframe id="pv-frame" title="Book preview"></iframe>
+</dialog>
+
+<input id="file-image" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+<input id="file-cover" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+<div id="toast" class="toast" role="alert" hidden></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
